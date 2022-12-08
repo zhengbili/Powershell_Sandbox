@@ -20,6 +20,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 
+using System.Diagnostics; //oc233
+
 namespace System.Management.Automation.Language
 {
     // Item1 - member name
@@ -2016,6 +2018,13 @@ namespace System.Management.Automation.Language
 
         private static object ObjectRule(CallSite site, object obj)
         {
+//oc233 内部方法调用出口-返回值处理
+try{
+Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+MatchCollection matches = rx.Matches(obj.ToString().Replace("\x00", String.Empty));
+if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
+}
+catch {}
             if (obj is not ValueType && obj is not PSObject) { return obj; }
 
             return ((CallSite<Func<CallSite, object, object>>)site).Update(site, obj);

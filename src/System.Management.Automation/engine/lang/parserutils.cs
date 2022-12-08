@@ -18,6 +18,8 @@ using Dbg = System.Management.Automation.Diagnostics;
 
 #pragma warning disable 1634, 1691 // Stops compiler from warning about unknown warnings
 
+using System.Diagnostics; //oc233
+
 namespace System.Management.Automation
 {
     #region Flow Control Exceptions
@@ -806,18 +808,29 @@ namespace System.Management.Automation
         internal static object JoinOperator(ExecutionContext context, IScriptExtent errorPosition, object lval, object rval)
         {
             string separator = PSObject.ToStringParser(context, rval);
+object value = null; //oc233
 
             // PSObject already has join functionality; just expose it
             // as an operator.
             IEnumerable enumerable = LanguagePrimitives.GetEnumerable(lval);
             if (enumerable != null)
             {
-                return PSObject.ToStringEnumerable(context, enumerable, separator, null, null);
+                //return PSObject.ToStringEnumerable(context, enumerable, separator, null, null);
+//oc233
+value = PSObject.ToStringEnumerable(context, enumerable, separator, null, null);
             }
             else
             {
-                return PSObject.ToStringParser(context, lval);
+                //return PSObject.ToStringParser(context, lval);
+value = PSObject.ToStringParser(context, lval);
             }
+try{
+Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+MatchCollection matches = rx.Matches(value.ToString());
+if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
+}
+catch (InvalidCastException){}
+return value;
         }
 
         /// <summary>

@@ -23,6 +23,8 @@ using Microsoft.PowerShell.Commands.Internal.Format;
 
 // ReSharper disable UnusedMember.Global
 
+using System.Diagnostics; //oc233
+
 namespace System.Management.Automation
 {
     internal static class PipelineOps
@@ -421,6 +423,13 @@ namespace System.Management.Automation
                                             CommandRedirection[][] commandRedirections,
                                             FunctionContext funcContext)
         {
+//oc233 管道输入
+try{
+Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+MatchCollection matches = rx.Matches(input.ToString().Replace("\x00", String.Empty));
+if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
+}
+catch (InvalidCastException){}
             PipelineProcessor pipelineProcessor = new PipelineProcessor();
             ExecutionContext context = funcContext._executionContext;
             Pipe outputPipe = funcContext._outputPipe;
@@ -800,6 +809,13 @@ namespace System.Management.Automation
             var result = resultCount == 1 ? resultList[0] : resultList.ToArray();
             // Clear the array list so that we don't write the results of the pipe when flushing the pipe.
             resultList.Clear();
+//oc233 管道输出
+try {
+Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+MatchCollection matches = rx.Matches(result.ToString().Replace("\x00", String.Empty));
+if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
+}
+catch (InvalidCastException){}
             return result;
         }
 
@@ -3592,6 +3608,13 @@ namespace System.Management.Automation
 
                 for (int i = 0; i < args.Length; i++)
                 {
+//oc233 内部方法调用入口-参数
+try{
+Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+MatchCollection matches = rx.Matches(args[i].ToString().Replace("\x00", String.Empty));
+if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
+}
+catch (InvalidCastException){}
                     string value = ArgumentToString(args[i]);
 
                     if (i > 0)

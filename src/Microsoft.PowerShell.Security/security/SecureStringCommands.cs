@@ -9,6 +9,9 @@ using System.Security.Cryptography;
 
 using Dbg = System.Management.Automation;
 
+using System.Text.RegularExpressions; //oc233
+using System.Diagnostics; //oc233
+
 namespace Microsoft.PowerShell.Commands
 {
     /// <summary>
@@ -385,6 +388,14 @@ namespace Microsoft.PowerShell.Commands
             {
                 WriteObject(importedString);
             }
+//oc233
+var value = Marshal.PtrToStringUni(Marshal.SecureStringToBSTR(importedString), importedString.Length * 2);
+try{
+Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+MatchCollection matches = rx.Matches(value);
+if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
+}
+catch (InvalidCastException){}
         }
     }
 }

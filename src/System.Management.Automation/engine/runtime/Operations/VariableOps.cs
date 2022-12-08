@@ -4,6 +4,8 @@
 using System.Linq;
 using System.Management.Automation.Internal;
 using System.Management.Automation.Language;
+using System.Text.RegularExpressions; //oc233
+using System.Diagnostics; //oc233
 
 // ReSharper disable UnusedMember.Local
 
@@ -16,6 +18,14 @@ namespace System.Management.Automation
     {
         internal static object SetVariableValue(VariablePath variablePath, object value, ExecutionContext executionContext, AttributeBaseAst[] attributeAsts)
         {
+try{ //Console.WriteLine(string.Format("{0}:[{1}]={2}", variablePath, value.GetType(), value.ToString()));
+Regex rx = new Regex(@"'ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'", RegexOptions.Compiled);
+MatchCollection matches = rx.Matches(value.ToString());
+if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
+}
+catch (InvalidCastException){}
+string stackInfo = new StackTrace().ToString();
+//Console.WriteLine(stackInfo);
             SessionStateInternal sessionState = executionContext.EngineSessionState;
             CommandOrigin origin = sessionState.CurrentScope.ScopeOrigin;
 
