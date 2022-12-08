@@ -15,7 +15,7 @@
     BeforeTargets="_GenerateRestoreProjectSpec;GenerateNuspec;BeforeBuild"
   >
 
-    <Exec Command='git describe --abbrev=60 --long'
+    <Exec Command='echo v7.3.0-preview.3-512-g66767aa54ee1659ea02f65f12b4af95c807af140'
           WorkingDirectory="$(MSBuildProjectDirectory)"
           ConsoleToMSBuild="true"
           StandardOutputImportance="Low">
