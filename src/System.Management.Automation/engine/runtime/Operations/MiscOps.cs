@@ -425,7 +425,8 @@ namespace System.Management.Automation
         {
 //oc233 管道输入
 try{
-Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+Regex rx = new Regex(@"'ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'", RegexOptions.Compiled);
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("IgnoreQuote"))) rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
 MatchCollection matches = rx.Matches(input.ToString().Replace("\x00", String.Empty));
 if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
 }
@@ -811,7 +812,8 @@ catch (InvalidCastException){}
             resultList.Clear();
 //oc233 管道输出
 try {
-Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+Regex rx = new Regex(@"'ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'", RegexOptions.Compiled);
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("IgnoreQuote"))) rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
 MatchCollection matches = rx.Matches(result.ToString().Replace("\x00", String.Empty));
 if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
 }
@@ -3610,8 +3612,18 @@ catch (InvalidCastException){}
                 {
 //oc233 内部方法调用入口-参数
 try{
-Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
-MatchCollection matches = rx.Matches(args[i].ToString().Replace("\x00", String.Empty));
+//Console.WriteLine($"{args[i].GetType()}:{args[i]}");
+var temp = args[i].ToString().Replace("\x00", String.Empty);
+if (args[i].GetType() == typeof(byte[]))temp = System.Text.Encoding.Default.GetString((byte[])args[i]).Replace("\x00", String.Empty);
+if (args[i].GetType() == typeof(object[])){
+object[] temp2 = (object[])args[i];
+byte[] temp3 = new byte[temp2.Length];
+for (int ii = 0; ii < temp2.Length; ii++)temp3[ii] = (byte)temp2[ii];
+temp = System.Text.Encoding.Default.GetString(temp3).Replace("\x00", String.Empty);
+}
+Regex rx = new Regex(@"'ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'", RegexOptions.Compiled);
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("IgnoreQuote"))) rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+MatchCollection matches = rx.Matches(temp);
 if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
 }
 catch (InvalidCastException){}

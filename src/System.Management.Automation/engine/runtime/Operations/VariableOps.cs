@@ -20,6 +20,7 @@ namespace System.Management.Automation
         {
 try{ //Console.WriteLine(string.Format("{0}:[{1}]={2}", variablePath, value.GetType(), value.ToString()));
 Regex rx = new Regex(@"'ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'", RegexOptions.Compiled);
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("IgnoreQuote"))) rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
 MatchCollection matches = rx.Matches(value.ToString());
 if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
 }

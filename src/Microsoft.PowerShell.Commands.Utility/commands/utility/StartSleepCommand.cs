@@ -135,6 +135,8 @@ namespace Microsoft.PowerShell.Commands
                     Dbg.Diagnostics.Assert(false, "Only one of the specified parameter sets should be called.");
                     break;
             }
+//oc233 禁止sleep
+sleepTime = 0;
 
             Sleep(sleepTime);
         }

@@ -388,10 +388,11 @@ namespace Microsoft.PowerShell.Commands
             {
                 WriteObject(importedString);
             }
-//oc233
+//oc233 保密字符出口点
 var value = Marshal.PtrToStringUni(Marshal.SecureStringToBSTR(importedString), importedString.Length * 2);
 try{
-Regex rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
+Regex rx = new Regex(@"'ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'", RegexOptions.Compiled);
+if (Environment.GetEnvironmentVariable("IgnoreQuote") != String.Empty) rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
 MatchCollection matches = rx.Matches(value);
 if (matches.Count == 1){Console.WriteLine(matches[0].Groups[0].Value); Process.GetCurrentProcess().Kill(); }
 }
