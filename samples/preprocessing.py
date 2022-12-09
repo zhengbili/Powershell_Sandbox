@@ -42,19 +42,18 @@ if len(matches) > 0:
     string = re.sub(pattern, "iex", string)
 
 #split
-pattern = re.compile(r".([s|S][p|P][l|L][i|I][t|T])\s*\(\s*'([^']*)'\s*\)")
+pattern = re.compile(r"(.([s|S][p|P][l|L][i|I][t|T])\s*\(\s*'([^']*)'\s*\))")
 matches = pattern.findall(string)
 new_string = ""
 for match in matches:
     #variable_name = match[0]
-    method_name = match[0]
-    split_string = match[1]
+    method_name = match[1]
+    split_string = match[2]
     new_string = f""
     for char in split_string:
         new_string += f" -{method_name.lower()}"+ f" '{char}'"
     print(new_string)
-if len(matches) > 0:
-    string = re.sub(pattern, new_string, string)
+    string = string.replace(match[0], new_string)
 
 o = open(outputFile, 'w')
 o.write(string)
