@@ -9,6 +9,16 @@ outputFile = sys.argv[2]
 with open(inputFile,'r') as f:
     string = f.read()
 
+#iex
+pattern = re.compile(r"(\.|\&)\s*\(\s*\$[a-zA-Z0-9_]*\[[0-9]*\]\s*\+\s*\$[a-zA-Z0-9_]*\[[0-9]*\]\s*\+\s*\'[x|X]\'+\s*\)", re.I)
+matches = pattern.findall(string)
+if len(matches) > 0:
+    string = re.sub(pattern, "iex", string)
+pattern = re.compile(r"(\.|\&)\s*\(\s*(.*?)\[[0-9,]*\]-join\'\'\)", re.I)
+matches = pattern.findall(string)
+if len(matches) > 0:
+    string = re.sub(pattern, "iex", string)
+
 #split
 pattern = re.compile(r".([s|S][p|P][l|L][i|I][t|T])\s*\(\s*'([^']*)'\s*\)")
 matches = pattern.findall(string)
