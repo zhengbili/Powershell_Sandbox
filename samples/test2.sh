@@ -18,3 +18,5 @@ for i in $(ls ../samples/Second-Stage/);do
 done
 cd ../samples
 ./postprocessing.py temp2.txt result2.txt
+./merge.py result2.txt
+cp result.txt /home/datacon/answer/powershell/level02/

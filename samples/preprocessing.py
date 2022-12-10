@@ -55,5 +55,14 @@ for match in matches:
     print(new_string)
     string = string.replace(match[0], new_string)
 
+#重设变量作用域
+pattern=re.compile(r"(\$([a-zA-Z]+)[\s]*=)")
+matches=pattern.findall(string)
+for match in matches:
+    string=string.replace(match[0], '$global:%s='%match[1])
+
+#问题样本
+string=string.replace('    $','\n$');
+
 o = open(outputFile, 'w')
 o.write(string)
