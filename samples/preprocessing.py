@@ -62,7 +62,7 @@ for match in matches:
     string=string.replace(match[0], '$global:%s='%match[1])
 
 #问题样本
-string=string.replace('    $','\n$');
+string=string.replace('    ','\n');
 
 o = open(outputFile, 'w')
 o.write(string)
