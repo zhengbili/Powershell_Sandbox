@@ -557,6 +557,7 @@ namespace System.Management.Automation
             ExecutionContext.CheckStackDepth();
 
             CommandProcessorBase oldCurrentCommandProcessor = _context.CurrentCommandProcessor;
+//Console.WriteLine(string.Format("1:{0}", oldCurrentCommandProcessor)); //oc233
             try
             {
                 Context.CurrentCommandProcessor = this;

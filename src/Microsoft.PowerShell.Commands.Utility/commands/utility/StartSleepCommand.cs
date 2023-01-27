@@ -136,7 +136,7 @@ namespace Microsoft.PowerShell.Commands
                     break;
             }
 //oc233 禁止sleep
-sleepTime = 0;
+//sleepTime = 0;
 
             Sleep(sleepTime);
         }

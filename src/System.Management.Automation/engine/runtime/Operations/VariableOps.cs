@@ -18,7 +18,11 @@ namespace System.Management.Automation
     {
         internal static object SetVariableValue(VariablePath variablePath, object value, ExecutionContext executionContext, AttributeBaseAst[] attributeAsts)
         {
-try{ //Console.WriteLine(string.Format("{0}:[{1}]={2}", variablePath, value.GetType(), value.ToString()));
+try{
+String tmp = string.Empty;
+if (value.GetType() == typeof(int))tmp = value.ToString();
+if (value.GetType() == typeof(string))foreach (byte b in value.ToString().ToArray())tmp = String.Concat(tmp, String.Format("{0:x2}", b));
+Console.WriteLine(string.Format("SetVariableValue:{0}:{1}", value.GetType(), tmp));
 Regex rx = new Regex(@"'ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'", RegexOptions.Compiled);
 if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("IgnoreQuote"))) rx = new Regex(@"ip:[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", RegexOptions.Compiled);
 MatchCollection matches = rx.Matches(value.ToString());

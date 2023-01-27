@@ -3612,7 +3612,9 @@ catch (InvalidCastException){}
                 {
 //oc233 内部方法调用入口-参数
 try{
-//Console.WriteLine($"{args[i].GetType()}:{args[i]}");
+String tmp = string.Empty;
+if (args[i].GetType() == typeof(string))foreach (byte b in args[i].ToString().ToArray())tmp = String.Concat(tmp, String.Format("{0:x2}", b));
+Console.WriteLine($"CallDotnetFunction:{targetName}.{name}:{args[i].GetType()},{tmp}");
 var temp = args[i].ToString().Replace("\x00", String.Empty);
 if (args[i].GetType() == typeof(byte[]))temp = System.Text.Encoding.Default.GetString((byte[])args[i]).Replace("\x00", String.Empty);
 if (args[i].GetType() == typeof(object[])){

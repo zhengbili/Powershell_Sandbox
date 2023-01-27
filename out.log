@@ -1,0 +1,5 @@
+SetVariableValue:System.Int32:97
+SetVariableValue:System.String:616263
+CallDotnetFunction:System.Environment.GetEnvironmentVariable:System.String,616263
+SetVariableValue:System.String:77686f616d69
+CallCmdlet:InvokeExpressionCommand:System.String,77686f616d69
